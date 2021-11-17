@@ -19,6 +19,9 @@ inputs:
     description: The GitHub personal access token
     required: true
     default: ${{ github.token }}
+  job_name:
+    description: The workflow job name
+    required: true
 runs:
   using: node12
   main: dist/index.js

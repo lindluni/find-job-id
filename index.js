@@ -11,6 +11,7 @@ const _Octokit = Octokit.plugin(retry, throttling);
     const workflowID = core.getInput('workflow_id', {required: true, trimWhitespace: true})
     const sha = core.getInput('sha', {required: true, trimWhitespace: true})
     const token = core.getInput('token', {required: true, trimWhitespace: true})
+    const name = core.getInput('job_name', {required: true, trimWhitespace: true})
     const client = new _Octokit({
         auth: token,
         request: {
@@ -29,15 +30,24 @@ const _Octokit = Octokit.plugin(retry, throttling);
             },
         }
     });
-    const jobs = await client.paginate(client.actions.listWorkflowRuns, {
+    const runs = await client.paginate(client.actions.listWorkflowRuns, {
         owner: org,
         repo: repo,
         workflow_id: workflowID,
     })
-    for (const job of jobs) {
-        if (job.head_sha === sha) {
-            core.info('Found job')
-            core.setOutput('job-id', job.id)
+    for (const run of runs) {
+        if (run.head_sha === sha) {
+            const jobs = await client.paginate(client.actions.listJobsForWorkflowRun,{
+                owner: org,
+                repo: repo,
+                run_id: run.id,
+                per_page: 100
+            })
+            for(const job of jobs) {
+                if(job.name === name) {
+                    core.setOutput('job_id', job.id)
+                }
+            }
             return
         }
     }
