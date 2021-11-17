@@ -48,7 +48,8 @@ const _Octokit = Octokit.plugin(retry, throttling);
             for(const job of jobs) {
                 console.log(job)
                 if(job.name === name) {
-                    core.setOutput('job_id', job.id)
+                    console.log('job fou')
+                    core.setOutput('job-id', job.id)
                 }
             }
             return
