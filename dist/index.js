@@ -10261,10 +10261,11 @@ const _Octokit = Octokit.plugin(retry, throttling);
                 run_id: run.id,
                 per_page: 100
             })
+            console.log(`looking for: ${name}`)
             for(const job of jobs) {
                 console.log(job)
                 if(job.name === name) {
-                    console.log('job fou')
+                    console.log('job found')
                     core.setOutput('job-id', job.id)
                 }
             }
