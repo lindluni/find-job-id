@@ -10252,7 +10252,9 @@ const _Octokit = Octokit.plugin(retry, throttling);
         workflow_id: workflowID,
     })
     for (const run of runs) {
+        console.log('Checking run')
         if (run.head_sha === sha) {
+            console.log('found sha')
             const jobs = await client.paginate(client.actions.listJobsForWorkflowRun,{
                 owner: org,
                 repo: repo,
@@ -10260,6 +10262,7 @@ const _Octokit = Octokit.plugin(retry, throttling);
                 per_page: 100
             })
             for(const job of jobs) {
+                console.log(job)
                 if(job.name === name) {
                     core.setOutput('job_id', job.id)
                 }
