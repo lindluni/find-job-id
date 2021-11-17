@@ -10252,25 +10252,28 @@ const _Octokit = Octokit.plugin(retry, throttling);
         workflow_id: workflowID,
     })
     for (const run of runs) {
-        console.log('Checking run')
         if (run.head_sha === sha) {
-            console.log('found sha')
+            core.info(`Found matching sha: ${sha}`)
             const jobs = await client.paginate(client.actions.listJobsForWorkflowRun,{
                 owner: org,
                 repo: repo,
                 run_id: run.id,
                 per_page: 100
             })
-            console.log(`looking for: ${name}`)
+            core.info(`Searching for job: ${name}`)
             for(const job of jobs) {
                 console.log(job)
                 if(job.name === name) {
-                    console.log('job found')
+                    core.info('Found job')
                     core.setOutput('job-id', job.id)
+                    return
                 }
             }
+            core.setFailed(`No matching job found`)
             return
         }
+        core.setFailed(`No matching SHA found`)
+        process.exit(1)
     }
 })()
 
