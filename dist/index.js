@@ -10262,7 +10262,6 @@ const _Octokit = Octokit.plugin(retry, throttling);
             })
             core.info(`Searching for job: ${name}`)
             for(const job of jobs) {
-                console.log(job)
                 if(job.name === name) {
                     core.info('Found job')
                     core.setOutput('job-id', job.id)
