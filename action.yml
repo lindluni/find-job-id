@@ -1,0 +1,24 @@
+name: Find Workflow Job ID
+description: Find the workflow job ID for a given workflow job name
+inputs:
+  org:
+    default: ${{ github.repository_owner }}
+    description: The GitHub organization name
+    required: true
+  repo:
+    description: The GitHub repository name
+    required: true
+  workflow_id:
+    description: The workflow ID
+    required: true
+  sha:
+    description: The SHA of the commit to use
+    required: true
+    default: ${{ github.sha }}
+  token:
+    description: The GitHub personal access token
+    required: true
+    default: ${{ github.token }}
+runs:
+  using: node12
+  main: dist/index.js
