@@ -22,6 +22,7 @@ inputs:
   job_name:
     description: The workflow job name
     required: true
+    default: ${{ github.job }}
 runs:
   using: node12
   main: dist/index.js
